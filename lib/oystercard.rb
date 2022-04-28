@@ -1,15 +1,15 @@
+require 'journey'
+
 class Oystercard
-  attr_reader :balance, :entry_station, :exit_station
+  attr_reader :balance, :journeys
 
   MAX_BALANCE = 90
   MIN_FARE = 1
+  PENALTY_FARE = 6
 
   def initialize
     @balance = 0
-
-    # @entry_station = nil
-    # @exit_station = nil
-    @journey = []
+    @journeys = []
   end
 
   def add_money(money)
@@ -17,26 +17,36 @@ class Oystercard
     @balance += money
   end
   
-  def in_journey?
-    entry_station == nil ? false : true
-   # Alternativly use Double Bang!
-   # !!entry_station
-  end
+  # def in_journey?
+  #   entry_station == nil ? false : true
+  #  # Alternativly use Double Bang!
+  #  # !!entry_station
+  # end
   
-  def touch_in(station)
+  def touch_in(entry_station)
     check_min_balance
-    @entry_station = station
+    (deduct_money(PENALTY_FARE) unless @journeys.last.journey_complete?) unless @journeys.empty? 
+    @journeys << Journey.new
+    @journeys.last.start_journey(entry_station)
   end
   
-  def touch_out(station)
-    deduct_money(MIN_FARE)
-    @journey << {entry_station: entry_station, exit_station: station} 
-    @entry_station = nil
-    # @exit_station = station
+  def touch_out(exit_station)
+    if @journeys.empty?
+      deduct_money(PENALTY_FARE)
+      @journeys << Journey.new
+      @journeys.last.finish_journey(exit_station)
+    elsif @journeys.last.journey_complete?
+      deduct_money(PENALTY_FARE)
+      @journeys << Journey.new
+      @journeys.last.finish_journey(exit_station)
+    else 
+      @journeys.last.finish_journey(exit_station)
+      deduct_money(@journeys.last.calculate_fare)
+    end 
   end
   
   def journey_log
-    @journey
+    @journeys.map{ |journey| journey.information }
   end
 
   private

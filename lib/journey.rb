@@ -22,4 +22,12 @@ class Journey
     MIN_FARE
   end
 
+  def journey_complete?
+    if @information[:entry_station] != nil && @information[:exit_station] != nil
+      true
+    else
+      false
+    end
+  end 
+
 end

@@ -31,5 +31,13 @@ describe Journey do
 
   end
 
+  describe '#journey_complete?' do 
+
+    it 'returns true when when information is populated' do
+      subject.start_journey(entry_station)
+      subject.finish_journey(exit_station)
+      expect(subject).to be_journey_complete
+    end 
+  end
 end
 
