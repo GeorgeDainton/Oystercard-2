@@ -43,11 +43,11 @@ describe Oystercard do
     #   expect(subject).to be_in_journey
     # end
 
-    it 'deducts penalty fare if previous journey incomplete (user didn\'t touch out)' do
-      subject.add_money(Oystercard::MIN_FARE)
-      subject.touch_in(entry_station)
-      expect { subject.touch_in(entry_station) }.to change { subject.balance }.by(-Oystercard::PENALTY_FARE)
-    end
+    # it 'deducts penalty fare if previous journey incomplete (user didn\'t touch out)' do
+    #   subject.add_money(Oystercard::MIN_FARE)
+    #   subject.touch_in(entry_station)
+    #   expect { subject.touch_in(entry_station) }.to change { subject.balance }.by(-Oystercard::PENALTY_FARE)
+    # end
 
 
     it 'it does not let you touch in if balance is less than min fare' do
@@ -69,9 +69,9 @@ describe Oystercard do
       expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-Oystercard::MIN_FARE)
     end
 
-    it 'deducts penalty fare if current journey incomplete (user didn\'t touch in)' do
-      expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-Oystercard::PENALTY_FARE)
-    end
+    # it 'deducts penalty fare if current journey incomplete (user didn\'t touch in)' do
+    #   expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-Oystercard::PENALTY_FARE)
+    # end
       
 
   

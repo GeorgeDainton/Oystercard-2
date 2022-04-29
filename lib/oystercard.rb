@@ -26,24 +26,28 @@ class Oystercard
   
   def touch_in(entry_station)
     check_min_balance
-    (deduct_money(PENALTY_FARE) unless @journeys.last.journey_complete?) unless @journeys.empty? 
+    # (deduct_money(PENALTY_FARE) unless @journeys.last.journey_complete?) unless @journeys.empty? 
     @journeys << Journey.new
     @journeys.last.start_journey(entry_station)
   end
   
   def touch_out(exit_station)
-    if @journeys.empty?
-      deduct_money(PENALTY_FARE)
-      @journeys << Journey.new
-      @journeys.last.finish_journey(exit_station)
-    elsif @journeys.last.journey_complete?
-      deduct_money(PENALTY_FARE)
-      @journeys << Journey.new
-      @journeys.last.finish_journey(exit_station)
-    else 
-      @journeys.last.finish_journey(exit_station)
-      deduct_money(@journeys.last.calculate_fare)
-    end 
+    
+    @journeys.last.finish_journey(exit_station)
+    deduct_money(@journeys.last.calculate_fare)
+
+    # if @journeys.empty?
+    #   deduct_money(PENALTY_FARE)
+    #   @journeys << Journey.new
+    #   @journeys.last.finish_journey(exit_station)
+    # elsif @journeys.last.journey_complete?
+    #   deduct_money(PENALTY_FARE)
+    #   @journeys << Journey.new
+    #   @journeys.last.finish_journey(exit_station)
+    # else 
+    #   @journeys.last.finish_journey(exit_station)
+    #   deduct_money(@journeys.last.calculate_fare)
+    # end 
   end
   
   def journey_log
