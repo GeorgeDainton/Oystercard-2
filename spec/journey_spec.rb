@@ -7,7 +7,7 @@ describe Journey do
 
   describe '#start_journey' do
 
-    it 'store entry station' do
+    it 'stores entry station' do
       subject.start_journey(entry_station)
       expect(subject.information[:entry_station]).to eq(entry_station)
     end
@@ -16,7 +16,7 @@ describe Journey do
 
   describe '#finish_journey' do
 
-    it 'store exit station' do
+    it 'stores exit station' do
       subject.finish_journey(exit_station)
       expect(subject.information[:exit_station]).to eq(exit_station)
     end
@@ -25,9 +25,21 @@ describe Journey do
 
   describe '#calculate_fare' do
 
-    it 'return fare' do
-      expect(subject.calculate_fare).to eq Journey::MIN_FARE
-    end
+  it 'returns min fare if journey complete' do
+    subject.start_journey(entry_station)
+    subject.finish_journey(exit_station)
+    expect(subject.calculate_fare).to eq Journey::MIN_FARE
+  end
+
+  
+  
+  it 'deducts penalty fare if user didn\'t touch in' do
+    subject.information[:entry_station] = nil
+    expect(subject.calculate_fare).to eq Journey::PENALTY_FARE
+  end
+
+
+
 
   end
 

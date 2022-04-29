@@ -1,6 +1,7 @@
 class Journey
 
   MIN_FARE = 1
+  PENALTY_FARE = 6
 
   attr_reader :information
 
@@ -19,7 +20,11 @@ class Journey
   end
 
   def calculate_fare
-    MIN_FARE
+    if @information[:entry_station] == nil || @information[:exit_station] == nil 
+      PENALTY_FARE
+    else
+      MIN_FARE
+    end
   end
 
   def journey_complete?
